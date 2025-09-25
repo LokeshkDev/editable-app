@@ -6,19 +6,31 @@ import "react-quill/dist/quill.snow.css";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
-// Example logo (replace with your base64 or file path)
-import logo from "./varahi-logo.png"; // place logo.png in /public or /src
+// Example logo (replace with your actual logo)
+import logo from "./varahi-logo.png";
 
 export default function QuotationGenerator() {
   const editorRefs = useRef([]);
   const [pages, setPages] = useState([0]);
   const [contents, setContents] = useState([""]);
 
+  // Add new page
   const addPage = () => {
     setPages([...pages, pages.length]);
     setContents([...contents, ""]);
   };
 
+  // Delete page
+  const deletePage = (index) => {
+    if (pages.length === 1) return; // prevent deleting last page
+    const newPages = pages.filter((_, i) => i !== index);
+    const newContents = contents.filter((_, i) => i !== index);
+    setPages(newPages);
+    setContents(newContents);
+    editorRefs.current.splice(index, 1); // cleanup ref
+  };
+
+  // Export PDF
   const exportPDF = async () => {
     const pdf = new jsPDF("p", "mm", "a4");
     const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -35,8 +47,8 @@ export default function QuotationGenerator() {
       const imgProps = pdf.getImageProperties(imgData);
       const contentHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-      // ✅ HEADER
-      pdf.setFillColor(150, 0, 0); // dark red header background
+      // Header
+      pdf.setFillColor(150, 0, 0);
       pdf.rect(0, 0, pdfWidth, 40, "F");
 
       if (logo) {
@@ -52,10 +64,10 @@ export default function QuotationGenerator() {
       pdf.setFont("helvetica", "normal");
       pdf.text("A-Z WEDDING PACKAGE", 50, 22);
       pdf.text("No.15/5, Avalkara Street, Kosapet, Vellore - 1", 50, 28);
-      pdf.text("90431 71992, 97865 63854", 50, 34);
-      pdf.text("srivarahicatering@gmail.com", 140, 34);
+      pdf.text("📞 90431 71992, 97865 63854", 50, 34);
+      pdf.text("✉️ srivarahicatering@gmail.com", 140, 34);
 
-      // ✅ BODY CONTENT (below header)
+      // Body content
       pdf.addImage(imgData, "PNG", 10, 50, pdfWidth - 20, contentHeight);
 
       if (i < editorRefs.current.length - 1) {
@@ -73,23 +85,35 @@ export default function QuotationGenerator() {
       {pages.map((page, index) => (
         <div
           key={index}
-          ref={(el) => (editorRefs.current[index] = el)}
-          className="p-4 border rounded bg-white shadow-md mb-6"
+          className="relative border rounded bg-white shadow-md mb-6"
         >
-          <ReactQuill
-            theme="snow"
-            value={contents[index]}
-            onChange={(val) => {
-              const newContents = [...contents];
-              newContents[index] = val;
-              setContents(newContents);
-            }}
-            placeholder={`Type your content for Page ${index + 1}...`}
-            className="min-h-[500px]"
-          />
+          {/* Delete Button */}
+          <button
+            onClick={() => deletePage(index)}
+            className="absolute -right-3 -top-3 bg-red-600 hover:bg-red-700 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md"
+            title="Delete Page"
+          >
+            ❌
+          </button>
+
+          {/* Editable Page */}
+          <div ref={(el) => (editorRefs.current[index] = el)} className="p-4">
+            <ReactQuill
+              theme="snow"
+              value={contents[index]}
+              onChange={(val) => {
+                const newContents = [...contents];
+                newContents[index] = val;
+                setContents(newContents);
+              }}
+              placeholder={`Type your content for Page ${index + 1}...`}
+              className="min-h-[500px]"
+            />
+          </div>
         </div>
       ))}
 
+      {/* Action Buttons */}
       <div className="flex gap-4">
         <button
           onClick={addPage}
