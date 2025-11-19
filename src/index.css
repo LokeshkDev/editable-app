@@ -53,6 +53,10 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+.ql-editor {
+  font-size: 22px !important;
+  line-height: 1.5;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
