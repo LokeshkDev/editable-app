@@ -1,4 +1,5 @@
 import { Outlet, Link } from "react-router-dom";
+import logo from "../assets/varahi-logo.png";
 
 export default function DashboardLayout() {
   return (
@@ -9,7 +10,9 @@ export default function DashboardLayout() {
         <div className="container">
 
           {/* Brand */}
+          
           <Link className="navbar-brand fw-bold" to="/dashboard">
+          <img src={logo} alt="Logo" style={{ height: "100px", marginRight: "10px" }} />
             Sri Varahi Catering
           </Link>
 
