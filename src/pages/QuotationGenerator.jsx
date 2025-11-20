@@ -41,7 +41,7 @@ export default function QuotationGenerator() {
   useEffect(() => {
     if (editName) {
       axios
-        .get(`http://localhost:5000/api/quotations/${editName}`)
+        .get(`https://catering-backend-yeub.onrender.com/api/quotations/${editName}`)
         .then((res) => {
           const data = res.data;
           setContents(data.contents);
@@ -125,7 +125,7 @@ export default function QuotationGenerator() {
     const payload = { name: quotationName, contents };
 
     try {
-      await axios.post("http://localhost:5000/api/quotations", payload);
+      await axios.post("https://catering-backend-yeub.onrender.com/api/quotations", payload);
       alert("Quotation Saved Successfully!");
       window.location.href = "/dashboard/saved";
     } catch (err) {

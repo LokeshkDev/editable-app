@@ -10,12 +10,9 @@ export default function SavedQuotations() {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/quotations").then((res) => setList(res.data));
+    axios.get("https://catering-backend-yeub.onrender.com/api/quotations").then((res) => setList(res.data));
   }, []);
 
-  // ---------------------------------------------------
-  // 🔥 GUARANTEED LOGO LOADER (Same as QuotationGenerator)
-  // ---------------------------------------------------
   const loadLogoBase64 = async () => {
     if (window.logoBase64) return window.logoBase64;
 
@@ -37,13 +34,10 @@ export default function SavedQuotations() {
   // ---------------------------------------------------
   const deleteQuotation = async (name) => {
     if (!confirm("Delete this quotation?")) return;
-    await axios.delete(`http://localhost:5000/api/quotations/${name}`);
+    await axios.delete(`https://catering-backend-yeub.onrender.com/api/quotations/${name}`);
     setList(list.filter((q) => q.name !== name));
   };
 
-  // ---------------------------------------------------
-  // DOWNLOAD PDF (with working logo)
-  // ---------------------------------------------------
   const downloadPdf = async (q) => {
     try {
       const dataUri = await generatePdfFromContents(q.contents);
