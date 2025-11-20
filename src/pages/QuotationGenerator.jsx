@@ -16,9 +16,6 @@ export default function QuotationGenerator() {
   const [contents, setContents] = useState([""]);
   const [quotationName, setQuotationName] = useState("");
 
-  // ------------------------------------------------------
-  // 🎯 GUARANTEED WORKING LOGO BASE64 LOADER
-  // ------------------------------------------------------
   const loadLogoBase64 = async () => {
     if (window.logoBase64) return window.logoBase64;
 
@@ -35,9 +32,6 @@ export default function QuotationGenerator() {
     });
   };
 
-  // ------------------------------------------------------
-  // LOAD EXISTING QUOTATION
-  // ------------------------------------------------------
   useEffect(() => {
     if (editName) {
       axios
@@ -52,11 +46,8 @@ export default function QuotationGenerator() {
     }
   }, [editName]);
 
-  // ------------------------------------------------------
-  // GENERATE PDF (WITH LOGO + HEADER)
-  // ------------------------------------------------------
   const generatePDF = async () => {
-    const logoBase64 = await loadLogoBase64(); // 🔥 logo guaranteed
+    const logoBase64 = await loadLogoBase64(); 
 
     const pdf = new jsPDF("p", "mm", "a4");
     const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -113,9 +104,6 @@ export default function QuotationGenerator() {
     pdf.save(`${quotationName || "quotation"}.pdf`);
   };
 
-  // ------------------------------------------------------
-  // SAVE TO MONGODB (ONLY CONTENTS)
-  // ------------------------------------------------------
   const saveQuotation = async () => {
     if (!quotationName.trim()) {
       alert("Please enter a quotation name");
@@ -134,17 +122,11 @@ export default function QuotationGenerator() {
     }
   };
 
-  // ------------------------------------------------------
-  // ADD NEW PAGE
-  // ------------------------------------------------------
   const addPage = () => {
     setPages([...pages, pages.length]);
     setContents([...contents, ""]);
   };
 
-  // ------------------------------------------------------
-  // DELETE PAGE
-  // ------------------------------------------------------
   const deletePage = (index) => {
     if (pages.length === 1) {
       alert("At least one page is required.");
@@ -156,9 +138,6 @@ export default function QuotationGenerator() {
     editorRefs.current.splice(index, 1);
   };
 
-  // ------------------------------------------------------
-  // UI
-  // ------------------------------------------------------
   return (
     <div className="container py-4">
       <h2 className="fw-bold mb-4">

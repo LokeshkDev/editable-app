@@ -29,9 +29,6 @@ export default function SavedQuotations() {
     });
   };
 
-  // ---------------------------------------------------
-  // DELETE QUOTATION
-  // ---------------------------------------------------
   const deleteQuotation = async (name) => {
     if (!confirm("Delete this quotation?")) return;
     await axios.delete(`https://catering-backend-yeub.onrender.com/api/quotations/${name}`);
@@ -51,9 +48,6 @@ export default function SavedQuotations() {
     }
   };
 
-  // ---------------------------------------------------
-  // PDF Generator (Works for Saved Quotations too)
-  // ---------------------------------------------------
   const generatePdfFromContents = async (contentsArray) => {
     const pdf = new jsPDF("p", "mm", "a4");
     const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -108,9 +102,6 @@ export default function SavedQuotations() {
     return pdf.output("datauristring");
   };
 
-  // ---------------------------------------------------
-  // UI
-  // ---------------------------------------------------
   return (
     <div className="container py-4">
       <h2 className="fw-bold mb-4">Saved Quotations</h2>
